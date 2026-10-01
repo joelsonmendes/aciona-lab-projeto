@@ -1,0 +1,12 @@
+import {calculate} from '../lib/calculations.ts';
+import assert from 'node:assert/strict';
+assert.equal(calculate('Compensada',{U:380,Id:120,k:.5}).result,'30 A na rede');
+assert.equal(calculate('Estrela-triângulo',{U:380,Id:90}).result,'30 A em estrela');
+assert.equal(calculate('Velocidade',{f:60,polos:4,n:1740}).result,'1.800 rpm');
+assert.ok(calculate('Conversões',{valor:1,unidade:1}).result.startsWith('0,735'));
+assert.ok(calculate('Potência e corrente',{P:7.5,U:380,'η':.9,FP:.85}).result.startsWith('14,896'));
+for(const v of [0,-1,NaN,Infinity])assert.throws(()=>calculate('Potência e corrente',{P:7.5,U:v,'η':.9,FP:.85}));
+assert.throws(()=>calculate('Compensada',{U:380,Id:120,k:1.1}));
+assert.throws(()=>calculate('Velocidade',{f:60,polos:3,n:1700}));
+assert.throws(()=>calculate('Velocidade',{f:60,polos:4,n:1900}));
+console.log('12 verificações de cálculos e limites passaram.');
